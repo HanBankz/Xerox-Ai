@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "705122694301",
+    "project_id": "ai-workspace-bc6c9",
+    "storage_bucket": "ai-workspace-bc6c9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705122694301:android:a76fb6700aea7d12801074",
+        "android_client_info": {
+          "package_name": "com.example.ai_workspace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtyoL_G7NsRetA4wo1vWbm2MNr69q1vl4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
