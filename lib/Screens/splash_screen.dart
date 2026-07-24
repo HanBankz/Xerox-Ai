@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'auth_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,14 +18,21 @@ class _SplashScreenState extends State<SplashScreen> {
     navigate();
   }
 
-  void navigate() {
-    Future.delayed(const Duration(seconds: 7), () {
-      if (!mounted) return;
+  void navigate() async {
+    await Future.delayed(const Duration(seconds: 3));
+    if (!mounted) return;
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
+    } else {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const AuthScreen()),
       );
-    });
+    }
   }
 
   @override
