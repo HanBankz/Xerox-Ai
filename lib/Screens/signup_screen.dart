@@ -49,6 +49,15 @@ class _SignupScreenState extends State<SignupScreen> {
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await _authService.saveUserData(
+          user.uid,
+          _nameController.text.trim(),
+          _emailController.text.trim(),
+        );
+      }
+      
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const HomeScreen()),

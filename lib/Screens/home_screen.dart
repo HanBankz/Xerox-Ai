@@ -13,6 +13,7 @@ class HomeScreen extends StatefulWidget {
 
 class HomeContent extends StatelessWidget {
   HomeContent({super.key});
+  //tools list
   final List<Map<String, dynamic>> _tools = [
     {
       'title': 'AI Chat',
@@ -37,6 +38,7 @@ class HomeContent extends StatelessWidget {
       'color': Color(0xFF8B4513),
     },
   ];
+  // BUILLD--
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -54,7 +56,8 @@ class HomeContent extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
+            //CARDS FOR TOOLS---
             Expanded(
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -83,6 +86,7 @@ class HomeContent extends StatelessWidget {
                           ),
                         ],
                       ),
+
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -118,68 +122,6 @@ class _HomeScreenState extends State<HomeScreen> {
     const HistoryScreen(),
     const ProfileScreen(),
   ];
-  final List<Map<String, dynamic>> _tools = [
-    {
-      'title': 'AI Chat',
-      'icon': Icons.chat_bubble_outline,
-      'color': Color(0xFFD2691E),
-    },
-    {
-      'title': 'Summarize',
-      'icon': Icons.summarize_outlined,
-      'color': Color(0xFF8B4513),
-    },
-    {
-      'title': 'Write Email',
-      'icon': Icons.email_outlined,
-      'color': Color(0xFFD2691E),
-    },
-    {'title': 'Translate', 'icon': Icons.translate, 'color': Color(0xFF8B4513)},
-    {'title': 'Explain Code', 'icon': Icons.code, 'color': Color(0xFFD2691E)},
-    {
-      'title': 'Brainstorm',
-      'icon': Icons.lightbulb_outline,
-      'color': Color(0xFF8B4513),
-    },
-  ];
-
-  Widget _buildToolCard(int index) {
-    final tool = _tools[index];
-    return GestureDetector(
-      onTap: () {
-        print('${tool['title']} tapped');
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFF2C1500),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: tool['color'], width: 1.5),
-          boxShadow: [
-            BoxShadow(
-              color: tool['color'].withOpacity(0.3),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(tool['icon'], color: tool['color'], size: 36),
-            const SizedBox(height: 12),
-            Text(
-              tool['title'],
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   // --- LOGIC ZONE ---
   void _logout() async {
@@ -191,26 +133,59 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  //buildtoolcard---
-
-  //---UI zone---
-  // --- UI ZONE ---
+  //UI ZONE--
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF1A0A00),
+      //first appbar---
       appBar: AppBar(
         backgroundColor: const Color(0xFF2C1500),
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu, color: Colors.white),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
         title: const Text(
           'Xerox Ai',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout, color: Colors.white),
-            onPressed: _logout,
-          ),
-        ],
+      ),
+      drawer: Drawer(
+        backgroundColor: const Color(0xFF2C1500),
+        child: Column(
+          children: [
+            DrawerHeader(
+              decoration: const BoxDecoration(color: Color(0xFF1A0A00)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 5),
+                  const Text(
+                    'Xerox AI',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout, color: Colors.white),
+              title: const Text(
+                'Logout',
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                _logout();
+              },
+            ),
+          ],
+        ),
       ),
 
       body: _screens[_selectedIndex],
