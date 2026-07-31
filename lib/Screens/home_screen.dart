@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'auth_screen.dart';
 import 'history_screen.dart';
 import 'profile_screen.dart';
+import 'chat_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,23 +20,40 @@ class HomeContent extends StatelessWidget {
       'title': 'AI Chat',
       'icon': Icons.chat_bubble_outline,
       'color': Color(0xFFD2691E),
+      'prompt': 'Your AI assistant. Answer questions clearly and concisely.',
     },
+
     {
       'title': 'Summarize',
       'icon': Icons.summarize_outlined,
       'color': Color(0xFF8B4513),
+      'prompt': 'summarizes text concisely',
     },
     {
       'title': 'Write Email',
       'icon': Icons.email_outlined,
       'color': Color(0xFFD2691E),
+      'prompt': 'writes professional emails',
     },
-    {'title': 'Translate', 'icon': Icons.translate, 'color': Color(0xFF8B4513)},
-    {'title': 'Explain Code', 'icon': Icons.code, 'color': Color(0xFFD2691E)},
+
+    {
+      'title': 'Translate',
+      'icon': Icons.translate,
+      'color': Color(0xFF8B4513),
+      'prompt': 'translates between languages',
+    },
+
+    {
+      'title': 'Explain Code',
+      'icon': Icons.code,
+      'color': Color(0xFFD2691E),
+      'prompt': 'explains and fixes code',
+    },
     {
       'title': 'Brainstorm',
       'icon': Icons.lightbulb_outline,
       'color': Color(0xFF8B4513),
+      'prompt': 'generates creative ideas',
     },
   ];
   // BUILLD--
@@ -57,6 +75,7 @@ class HomeContent extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
+
             //CARDS FOR TOOLS---
             Expanded(
               child: GridView.builder(
@@ -71,7 +90,15 @@ class HomeContent extends StatelessWidget {
                   final tool = _tools[index];
                   return GestureDetector(
                     onTap: () {
-                      print('${tool['title']} tapped');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ChatScreen(
+                            title: tool['prompt']!,
+                            systemPrompt: tool['prompt']!,
+                          ),
+                        ),
+                      );
                     },
                     child: Container(
                       decoration: BoxDecoration(
