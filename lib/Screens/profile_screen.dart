@@ -80,17 +80,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style: const TextStyle(color: Colors.grey, fontSize: 14),
                     ),
                     const SizedBox(height: 40),
-const Divider(color: Color(0xFF2C1500), thickness: 1),
-const SizedBox(height: 24),
-ListTile(
-  leading: const Icon(Icons.edit, color: Colors.red,
-  ),
-  onTap: () async {
-    await FirebaseAuth.instance.signOut();
-    if (!mounted) return;
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const AuthScreen()));
-  },
-),
+                    const Divider(color: Color(0xFF2C1500), thickness: 1),
+                    const SizedBox(height: 24),
+                    ListTile(
+                      leading: const Icon(Icons.edit, color: Colors.red),
+                      onTap: () async {
+                        await FirebaseAuth.instance.signOut();
+                        if (!mounted) return;
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => const AuthScreen()),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),
