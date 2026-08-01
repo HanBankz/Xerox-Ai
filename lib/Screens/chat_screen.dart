@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import '../services/ai_service.dart';
 
 class ChatScreen extends StatefulWidget {
   final String title;
@@ -16,6 +18,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   // --- VARIABLES ZONE ---
+  final AiService _aiService = AiService();
   final List<Map<String, String>> _messages = [];
   final TextEditingController _controller = TextEditingController();
   bool _isLoading = false;
@@ -45,27 +48,21 @@ class _ChatScreenState extends State<ChatScreen> {
   void _sendMessage() async {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
-    setState(() {
-      _messages.add({'role': 'user', 'content': text});
-      _isLoading = true;
-    });
-    _controller.clear();
-    _scrollToBottom();
     try {
-      await Future.delayed(const Duration(seconds: 1));
+      final response = await _aiService.sendMessage(
+        _messages,
+        widget.systemPrompt,
+      );
       setState(() {
-        _messages.add({
-          'role': 'assistant',
-          'content': 'AI response coming soon — API key needed.',
-        });
-        _isLoading = false;
-      });
-      _scrollToBottom();
+      _messages.add({'role': 'assistant', 'content': response});
+      _isLoading = false;
+    });
+    _scrollToBottom();
     } catch (e) {
       setState(() => _isLoading = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
 
@@ -108,11 +105,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildDot(0),
-            _buildDot(1),
-            _buildDot(2),
-          ],
+          children: [_buildDot(0), _buildDot(1), _buildDot(2)],
         ),
       ),
     );
@@ -163,9 +156,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           Container(
             padding: const EdgeInsets.all(12),
-            decoration: const BoxDecoration(
-              color: Color(0xFF2C1500),
-            ),
+            decoration: const BoxDecoration(color: Color(0xFF2C1500)),
             child: Row(
               children: [
                 Expanded(
