@@ -4,6 +4,7 @@ import 'auth_screen.dart';
 import 'history_screen.dart';
 import 'profile_screen.dart';
 import 'chat_screen.dart';
+import 'persona_selection_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -67,7 +68,7 @@ class HomeContent extends StatelessWidget {
           children: [
             const SizedBox(height: 24),
             const Text(
-              'What would you like to do?',
+              '👋 Welcome back, Choose your AI Workspace',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -94,7 +95,7 @@ class HomeContent extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (_) => ChatScreen(
-                            title: tool['prompt']!,
+                            title: tool['title']!,
                             systemPrompt: tool['prompt']!,
                           ),
                         ),
@@ -168,6 +169,17 @@ class _HomeScreenState extends State<HomeScreen> {
       //first appbar---
       appBar: AppBar(
         backgroundColor: const Color(0xFF2C1500),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.psychology, color: Colors.white),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => PersonaSelectionScreen()),
+              );
+            },
+          ),
+        ],
         leading: Builder(
           builder: (context) => IconButton(
             icon: const Icon(Icons.menu, color: Colors.white),
