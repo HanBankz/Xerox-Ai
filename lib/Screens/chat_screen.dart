@@ -48,16 +48,22 @@ class _ChatScreenState extends State<ChatScreen> {
   void _sendMessage() async {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
+    setState(() {
+      _messages.add({'role': 'user', 'content': text});
+      _isLoading = true;
+    });
+    _controller.clear();
+    _scrollToBottom();
     try {
       final response = await _aiService.sendMessage(
         _messages,
         widget.systemPrompt,
       );
       setState(() {
-      _messages.add({'role': 'assistant', 'content': response});
-      _isLoading = false;
-    });
-    _scrollToBottom();
+        _messages.add({'role': 'assistant', 'content': response});
+        _isLoading = false;
+      });
+      _scrollToBottom();
     } catch (e) {
       setState(() => _isLoading = false);
       ScaffoldMessenger.of(
