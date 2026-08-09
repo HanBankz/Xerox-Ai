@@ -1,59 +1,58 @@
+// ignore_for_file: dot_shorthand_everywhere
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../utils/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AiService {
   Future<String> sendMessage(
     List<Map<String, String>> messages,
     String systemPrompt,
   ) async {
-    final url = Uri.parse(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$geminiApiKey',
-    );
-
-    final contents = messages.map((msg) {
-      return {
-        'role': msg['role'] == 'assistant' ? 'model' : 'user',
-        'parts': [
-          {'text': msg['content']},
-        ],
-      };
-    }).toList();
-
-    print(
-      'Sending to Gemini: ${jsonEncode({
-        'system_instruction': {
-          'parts': [
-            {'text': systemPrompt},
-          ],
-        },
-        'contents': contents,
-      })}',
-    );
+    final url = Uri.parse('https://api.groq.com/openai/v1/chat/completions');
 
     final body = jsonEncode({
-      'system_instruction': {
-        'parts': [
-          {'text': systemPrompt},
-        ],
-      },
-      'contents': contents,
+      'model': 'llama-3.3-70b-versatile',
+      'messages': [
+        {'role': 'system', 'content': systemPrompt},
+        ...messages.map((m) => {'role': m['role'], 'content': m['content']}),
+      ],
     });
 
     final response = await http.post(
       url,
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $groqApiKey',
+      },
       body: body,
     );
 
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
-
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return data['candidates'][0]['content']['parts'][0]['text'];
+      return data['choices'][0]['message']['content'];
     } else {
-      throw Exception('Gemini error: ${response.statusCode}');
+      print('Groq error: ${response.body}');
+      throw Exception('AI error: ${response.statusCode}');
     }
+  }
+
+  Future<void> saveChat(
+    String title,
+    List<Map<String, String>> messages,
+  ) async {
+    print('saveChat called for: $title');
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('chats')
+        .add({
+          'title': title,
+          'messages': messages,
+          'createdAt': FieldValue.serverTimestamp(),
+        });
   }
 }

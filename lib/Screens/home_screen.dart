@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'auth_screen.dart';
 import 'history_screen.dart';
 import 'profile_screen.dart';
@@ -13,9 +14,20 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class HomeContent extends StatelessWidget {
-  HomeContent({super.key});
-  //tools list
+class HomeContent extends StatefulWidget {
+  const HomeContent({super.key});
+
+  @override
+  State<HomeContent> createState() => _HomeContentState();
+}
+
+class _HomeContentState extends State<HomeContent>
+    with TickerProviderStateMixin {
+  // --- VARIABLES ZONE ---
+  String _userName = '';
+  String _displayedGreeting = '';
+  String _fullGreeting = '';
+
   final List<Map<String, dynamic>> _tools = [
     {
       'title': 'AI Chat',
@@ -23,7 +35,6 @@ class HomeContent extends StatelessWidget {
       'color': Color(0xFFD2691E),
       'prompt': 'Your AI assistant. Answer questions clearly and concisely.',
     },
-
     {
       'title': 'Summarize',
       'icon': Icons.summarize_outlined,
@@ -36,14 +47,12 @@ class HomeContent extends StatelessWidget {
       'color': Color(0xFFD2691E),
       'prompt': 'writes professional emails',
     },
-
     {
       'title': 'Translate',
       'icon': Icons.translate,
       'color': Color(0xFF8B4513),
       'prompt': 'translates between languages',
     },
-
     {
       'title': 'Explain Code',
       'icon': Icons.code,
@@ -57,7 +66,44 @@ class HomeContent extends StatelessWidget {
       'prompt': 'generates creative ideas',
     },
   ];
-  // BUILLD--
+
+  // --- LIFECYCLE ZONE ---
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserName();
+  }
+
+  // --- LOGIC ZONE ---
+  Future<void> _fetchUserName() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return;
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get();
+    setState(() {
+      _userName = doc.data()?['name'] ?? 'there';
+      _startTypingAnimation();
+    });
+  }
+
+  void _startTypingAnimation() {
+    _fullGreeting =
+        '👋 Welcome back, $_userName! What are we working on today?';
+    int index = 0;
+    Future.doWhile(() async {
+      await Future.delayed(const Duration(milliseconds: 50));
+      if (!mounted) return false;
+      setState(() {
+        _displayedGreeting = _fullGreeting.substring(0, index + 1);
+        index++;
+      });
+      return index < _fullGreeting.length;
+    });
+  }
+
+  // --- UI ZONE ---
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -67,17 +113,15 @@ class HomeContent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 24),
-            const Text(
-              '👋 Welcome back, Choose your AI Workspace',
-              style: TextStyle(
+            Text(
+              _displayedGreeting,
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 40),
-
-            //CARDS FOR TOOLS---
             Expanded(
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -114,7 +158,6 @@ class HomeContent extends StatelessWidget {
                           ),
                         ],
                       ),
-
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -161,12 +204,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  //UI ZONE--
+  // --- UI ZONE ---
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF1A0A00),
-      //first appbar---
+      backgroundColor: const Color(0xFF1A0A00),
       appBar: AppBar(
         backgroundColor: const Color(0xFF2C1500),
         actions: [
@@ -226,10 +268,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color(0xFF2C1500),
+        currentIndex: _selectedIndex,
         selectedItemColor: const Color(0xFFD2691E),
         unselectedItemColor: Colors.grey,
         onTap: (index) {
@@ -237,7 +279,6 @@ class _HomeScreenState extends State<HomeScreen> {
             _selectedIndex = index;
           });
         },
-        //bottom navigation--
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),

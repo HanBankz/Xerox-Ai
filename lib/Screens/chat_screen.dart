@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import '../services/ai_service.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -27,6 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
   // --- CLEANUP ZONE ---
   @override
   void dispose() {
+    AiService().saveChat(widget.title, _messages);
     _controller.dispose();
     _scrollController.dispose();
     super.dispose();
@@ -64,12 +64,20 @@ class _ChatScreenState extends State<ChatScreen> {
         _isLoading = false;
       });
       _scrollToBottom();
-    } catch (e) {
-      setState(() => _isLoading = false);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(e.toString())));
-    }
+} catch (e) {
+  setState(() => _isLoading = false);
+  String message = 'Failed to get a response. Please try again.';
+  if (e.toString().contains('401')) {
+    message = 'AI service error. Please contact support.';
+  } else if (e.toString().contains('429')) {
+    message = 'Too many requests. Please wait a moment.';
+  } else if (e.toString().contains('SocketException')) {
+    message = 'No internet connection. Please check your network.';
+  }
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(message)),
+  );
+}
   }
 
   Widget _buildMessage(Map<String, String> message) {
