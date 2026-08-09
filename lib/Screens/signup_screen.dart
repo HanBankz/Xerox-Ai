@@ -62,11 +62,21 @@ class _SignupScreenState extends State<SignupScreen> {
         context,
         MaterialPageRoute(builder: (_) => const HomeScreen()),
       );
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(e.toString())));
-    }
+} catch (e) {
+  String message = 'Something went wrong. Please try again.';
+  if (e.toString().contains('email-already-in-use')) {
+    message = 'An account already exists with this email.';
+  } else if (e.toString().contains('invalid-email')) {
+    message = 'Please enter a valid email address.';
+  } else if (e.toString().contains('weak-password')) {
+    message = 'Password is too weak. Use at least 6 characters.';
+  } else if (e.toString().contains('too-many-requests')) {
+    message = 'Too many attempts. Please try again later.';
+  }
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(message)),
+  );
+}
     setState(() => _isLoading = false);
   }
 

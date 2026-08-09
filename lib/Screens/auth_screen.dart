@@ -72,11 +72,21 @@ class _AuthScreenState extends State<AuthScreen>
         context,
         MaterialPageRoute(builder: (_) => const HomeScreen()),
       );
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(e.toString())));
-    }
+} catch (e) {
+  String message = 'Something went wrong. Please try again.';
+  if (e.toString().contains('user-not-found')) {
+    message = 'No account found with this email.';
+  } else if (e.toString().contains('wrong-password')) {
+    message = 'Incorrect password. Please try again.';
+  } else if (e.toString().contains('invalid-email')) {
+    message = 'Please enter a valid email address.';
+  } else if (e.toString().contains('too-many-requests')) {
+    message = 'Too many attempts. Please try again later.';
+  }
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(message)),
+  );
+}
     setState(() => _isLoading = false);
   }
 

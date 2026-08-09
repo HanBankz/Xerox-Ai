@@ -41,6 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   //--UI ZONE--
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF1A0A00),
