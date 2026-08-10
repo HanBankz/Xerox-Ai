@@ -72,21 +72,21 @@ class _AuthScreenState extends State<AuthScreen>
         context,
         MaterialPageRoute(builder: (_) => const HomeScreen()),
       );
-} catch (e) {
-  String message = 'Something went wrong. Please try again.';
-  if (e.toString().contains('user-not-found')) {
-    message = 'No account found with this email.';
-  } else if (e.toString().contains('wrong-password')) {
-    message = 'Incorrect password. Please try again.';
-  } else if (e.toString().contains('invalid-email')) {
-    message = 'Please enter a valid email address.';
-  } else if (e.toString().contains('too-many-requests')) {
-    message = 'Too many attempts. Please try again later.';
-  }
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text(message)),
-  );
-}
+    } catch (e) {
+      String message = 'Something went wrong. Please try again.';
+      if (e.toString().contains('user-not-found')) {
+        message = 'No account found with this email.';
+      } else if (e.toString().contains('wrong-password')) {
+        message = 'Incorrect password. Please try again.';
+      } else if (e.toString().contains('invalid-email')) {
+        message = 'Please enter a valid email address.';
+      } else if (e.toString().contains('too-many-requests')) {
+        message = 'Too many attempts. Please try again later.';
+      }
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
+    }
     setState(() => _isLoading = false);
   }
 
@@ -117,7 +117,7 @@ class _AuthScreenState extends State<AuthScreen>
                     children: [
                       const SizedBox(height: 60),
                       Image.asset(
-                        'assets/images/ai_workspace.png',
+                        'assets/images/Xerox_ai.png',
                         height: 120,
                         width: 120,
                       ),

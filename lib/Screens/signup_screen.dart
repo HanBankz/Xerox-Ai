@@ -94,7 +94,7 @@ class _SignupScreenState extends State<SignupScreen> {
               children: [
                 const SizedBox(height: 40),
                 Image.asset(
-                  'assets/images/ai_workspace.png',
+                  'assets/images/Xerox_ai.png',
                   height: 120,
                   width: 120,
                 ),
