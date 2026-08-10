@@ -66,6 +66,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -75,7 +76,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/ai_workspace.png
+    - assets/images/Xerox_ai.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -107,3 +108,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+  
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/Xerox_ai.png"

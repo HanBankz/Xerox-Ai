@@ -45,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
           spacing: 25,
           children: [
             Image(
-              image: AssetImage('assets/images/ai_workspace.png'),
+              image: AssetImage('assets/images/Xerox_ai.png'),
               height: 200,
               width: 200,
               fit: BoxFit.fitHeight,
