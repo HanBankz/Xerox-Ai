@@ -24,13 +24,15 @@ class PersonaChatScreen extends StatefulWidget {
 }
 
 class _PersonaChatScreenState extends State<PersonaChatScreen> {
+  // bankz VARIABLES ZONE ---
   final List<Map<String, String>> _messages = [];
   final TextEditingController _controller = TextEditingController();
-  bool _isLoading = false;
   final ScrollController _scrollController = ScrollController();
+  bool _isLoading = false;
   bool _greetingShown = false;
   final AiService _aiService = AiService();
 
+  // bankz CLEANUP ZONE ---
   @override
   void dispose() {
     AiService().saveChat(widget.name, _messages).then((_) {
@@ -41,21 +43,23 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
     super.dispose();
   }
 
+  // bankz LIFECYCLE ZONE ---
   @override
   void initState() {
     super.initState();
     _showGreeting();
   }
 
+  // bankz LOGIC ZONE ---
   void _showGreeting() {
-    if (!_greetingShown) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_greetingShown) {
         setState(() {
           _messages.add({'role': 'assistant', 'content': widget.greeting});
           _greetingShown = true;
         });
-      });
-    }
+      }
+    });
   }
 
   void _scrollToBottom() {
@@ -80,10 +84,7 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
     _controller.clear();
     _scrollToBottom();
     try {
-      final response = await _aiService.sendMessage(
-        _messages,
-        widget.systemPrompt,
-      );
+      final response = await _aiService.sendMessage(_messages, widget.systemPrompt);
       setState(() {
         _messages.add({'role': 'assistant', 'content': response});
         _isLoading = false;
@@ -99,9 +100,9 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
       } else if (e.toString().contains('SocketException')) {
         message = 'No internet connection. Please check your network.';
       }
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
     }
   }
 
@@ -110,33 +111,33 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width * 0.75,
         ),
         decoration: BoxDecoration(
-          color: isUser ? const Color(0xFFD2691E) : const Color(0xFF2C1500),
+          color: isUser ? widget.accentColor : const Color(0xFF2C1500),
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(16),
             topRight: const Radius.circular(16),
-            bottomLeft: isUser ? const Radius.circular(16) : Radius.zero,
-            bottomRight: isUser ? Radius.zero : const Radius.circular(16),
+            bottomLeft: isUser ? const Radius.circular(16) : const Radius.circular(4),
+            bottomRight: isUser ? const Radius.circular(4) : const Radius.circular(16),
           ),
         ),
         child: Text(
-          message['content']!,
-          style: const TextStyle(color: Colors.white, fontSize: 15),
+          message['content'] ?? '',
+          style: const TextStyle(color: Colors.white, fontSize: 14),
         ),
       ),
     );
   }
 
-  Widget _buildDot(int index) {
+  Widget _buildDot(int delay) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 2),
       width: 8,
       height: 8,
+      margin: const EdgeInsets.symmetric(horizontal: 2),
       decoration: const BoxDecoration(
         color: Colors.grey,
         shape: BoxShape.circle,
@@ -148,65 +149,73 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
         decoration: BoxDecoration(
           color: const Color(0xFF2C1500),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: [_buildDot(0), _buildDot(1), _buildDot(2)],
+          children: [
+            _buildDot(0),
+            _buildDot(1),
+            _buildDot(2),
+          ],
         ),
       ),
     );
   }
 
+  // bankz UI ZONE ---
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: widget.accentColor.withOpacity(0.1),
       appBar: AppBar(
-        title: Text(widget.name, style: const TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF2C1500),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(widget.name, style: const TextStyle(color: Colors.white)),
       ),
       body: Column(
         children: [
-          const SizedBox(height: 40),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: Row(
-              children: widget.actions.map((action) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: ActionChip(
-                    label: Text(action.toString()),
-                    onPressed: () {
-                      _controller.text = action.toString();
-                    },
-                  ),
+          const SizedBox(height: 8),
+          SizedBox(
+            height: 40,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              itemCount: widget.actions.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              itemBuilder: (context, index) {
+                return ActionChip(
+                  label: Text(widget.actions[index].toString()),
+                  onPressed: () {
+                    _controller.text = widget.actions[index].toString();
+                  },
+                  backgroundColor: const Color(0xFF2C1500),
+                  labelStyle: TextStyle(color: widget.accentColor, fontSize: 12),
+                  side: BorderSide(color: widget.accentColor, width: 0.5),
                 );
-              }).toList(),
+              },
             ),
           ),
-          const SizedBox(height: 6),
           Expanded(
             child: ListView.builder(
               controller: _scrollController,
-              padding: const EdgeInsets.all(16),
               itemCount: _messages.length + (_isLoading ? 1 : 0),
               itemBuilder: (context, index) {
-                if (index == _messages.length) {
-                  return _buildTypingIndicator();
-                }
+                if (index == _messages.length) return _buildTypingIndicator();
                 return _buildMessage(_messages[index]);
               },
             ),
           ),
           Container(
-            padding: const EdgeInsets.all(12),
-            decoration: const BoxDecoration(color: Color(0xFF2C1500)),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            color: const Color(0xFF2C1500),
             child: Row(
               children: [
                 Expanded(
@@ -216,12 +225,12 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
                     decoration: InputDecoration(
                       hintText: widget.hint,
                       hintStyle: const TextStyle(color: Colors.grey),
+                      filled: true,
+                      fillColor: const Color(0xFF1A0A00),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
                         borderSide: BorderSide.none,
                       ),
-                      filled: true,
-                      fillColor: const Color(0xFF1A0A00),
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 10,
@@ -231,19 +240,11 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: _sendMessage,
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: widget.accentColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.send,
-                      color: Colors.white,
-                      size: 20,
-                    ),
+                CircleAvatar(
+                  backgroundColor: widget.accentColor,
+                  child: IconButton(
+                    icon: const Icon(Icons.send, color: Colors.white, size: 18),
+                    onPressed: _sendMessage,
                   ),
                 ),
               ],

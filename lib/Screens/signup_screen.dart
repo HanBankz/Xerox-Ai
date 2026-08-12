@@ -12,7 +12,7 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  // --- VARIABLES ZONE ---
+  // bankz VARIABLES ZONE ---
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -22,7 +22,7 @@ class _SignupScreenState extends State<SignupScreen> {
   bool _obscureConfirmPassword = true;
   final AuthService _authService = AuthService();
 
-  // --- CLEANUP ZONE ---
+  // bankz CLEANUP ZONE ---
   @override
   void dispose() {
     _nameController.dispose();
@@ -32,7 +32,7 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
-  // --- LOGIC ZONE ---
+  // bankz LOGIC ZONE ---
   void _signUp() async {
     print('password: ${_passwordController.text.trim()}');
     print('confirm: ${_confirmPasswordController.text.trim()}');
@@ -57,30 +57,32 @@ class _SignupScreenState extends State<SignupScreen> {
           _emailController.text.trim(),
         );
       }
-      
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const HomeScreen()),
       );
-} catch (e) {
-  String message = 'Something went wrong. Please try again.';
-  if (e.toString().contains('email-already-in-use')) {
-    message = 'An account already exists with this email.';
-  } else if (e.toString().contains('invalid-email')) {
-    message = 'Please enter a valid email address.';
-  } else if (e.toString().contains('weak-password')) {
-    message = 'Password is too weak. Use at least 6 characters.';
-  } else if (e.toString().contains('too-many-requests')) {
-    message = 'Too many attempts. Please try again later.';
-  }
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text(message)),
-  );
-}
+    } catch (e) {
+      String message = 'Something went wrong. Please try again.';
+      if (e.toString().contains('email-already-in-use')) {
+        message = 'An account already exists with this email.';
+      } else if (e.toString().contains('invalid-email')) {
+        message = 'Please enter a valid email address.';
+      } else if (e.toString().contains('weak-password')) {
+        message = 'Password is too weak. Use at least 6 characters.';
+      } else if (e.toString().contains('too-many-requests')) {
+        message = 'Too many attempts. Please try again later.';
+      } else if (e.toString().contains('network-request-failed')) {
+        message = 'No internet connection. Please check your network.';
+      }
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
+    }
     setState(() => _isLoading = false);
   }
 
-  // --- UI ZONE ---
+  // bankz UI ZONE ---
   @override
   Widget build(BuildContext context) {
     return Scaffold(
