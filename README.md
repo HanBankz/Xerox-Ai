@@ -1,16 +1,27 @@
-# ai_workspace
+# Xerox AI
 
-A new Flutter project.
+An AI-powered mobile app built with Flutter, offering personalized AI personas and real-time topic feeds.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- 🔐 Firebase Authentication (Sign up / Login)
+- 🤖 AI Chat powered by Groq (LLaMA 3.3 70B)
+- 🎭 AI Deck — 4 specialized AI personas (Programmer, Consultant, Marketing Strategist, Did You Know)
+- 📰 Updates — 6 topic feeds (Crypto, Dev, Health, Finance, AI, World News) with live AI responses
+- 💾 Chat history saved to Firestore per user
+- 👤 User profile with logout
 
-A few resources to get you started if this is your first Flutter project:
+## Tech Stack
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter & Dart
+- Firebase (Auth + Firestore)
+- Groq API (LLaMA 3.3 70B)
+- REST API via HTTP package
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Screenshots
+
+Coming soon
+
+## Author
+
+Built by Ridwan Muhammad— Flutter Developer
