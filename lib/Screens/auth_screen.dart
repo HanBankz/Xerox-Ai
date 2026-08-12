@@ -82,6 +82,10 @@ class _AuthScreenState extends State<AuthScreen>
         message = 'Please enter a valid email address.';
       } else if (e.toString().contains('too-many-requests')) {
         message = 'Too many attempts. Please try again later.';
+      } else if (e.toString().contains('network-request-failed')) {
+        message = 'No internet connection. Please check your network.';
+      } else if (e.toString().contains('invalid-credential')) {
+        message = 'Invalid email or password. Please try again.';
       }
       ScaffoldMessenger.of(
         context,
