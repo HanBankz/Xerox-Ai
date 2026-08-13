@@ -296,7 +296,7 @@ class _HomeContentState extends State<HomeContent>
                 _buildStat(_todayChats.toString(), 'today'),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
 
             // ---bankz  AI DECK ---
             const Text(
@@ -308,7 +308,7 @@ class _HomeContentState extends State<HomeContent>
               ),
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 20),
             Center(
               child: SizedBox(
                 height: 40,
@@ -318,7 +318,7 @@ class _HomeContentState extends State<HomeContent>
                   itemBuilder: (context, index) {
                     final persona = _personas[index];
                     return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -365,7 +365,7 @@ class _HomeContentState extends State<HomeContent>
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
 
             // ---bankz UPDATES ---
             const Text(
@@ -447,6 +447,10 @@ class _HomeContentState extends State<HomeContent>
                               scrollAxis: Axis.horizontal,
                               blankSpace: 40,
                               velocity: 30,
+                              startAfter: const Duration(milliseconds: 500),
+                              pauseAfterRound: const Duration(
+                                milliseconds: 500,
+                              ),
                             ),
                           ),
                         ),
@@ -456,7 +460,7 @@ class _HomeContentState extends State<HomeContent>
                 );
               },
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
 
             // --- RECENT CHATS ---
             const Text(
