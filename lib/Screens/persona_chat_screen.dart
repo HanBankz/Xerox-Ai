@@ -84,7 +84,10 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
     _controller.clear();
     _scrollToBottom();
     try {
-      final response = await _aiService.sendMessage(_messages, widget.systemPrompt);
+      final response = await _aiService.sendMessage(
+        _messages,
+        widget.systemPrompt,
+      );
       setState(() {
         _messages.add({'role': 'assistant', 'content': response});
         _isLoading = false;
@@ -100,9 +103,9 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
       } else if (e.toString().contains('SocketException')) {
         message = 'No internet connection. Please check your network.';
       }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     }
   }
 
@@ -121,8 +124,12 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(16),
             topRight: const Radius.circular(16),
-            bottomLeft: isUser ? const Radius.circular(16) : const Radius.circular(4),
-            bottomRight: isUser ? const Radius.circular(4) : const Radius.circular(16),
+            bottomLeft: isUser
+                ? const Radius.circular(16)
+                : const Radius.circular(4),
+            bottomRight: isUser
+                ? const Radius.circular(4)
+                : const Radius.circular(16),
           ),
         ),
         child: Text(
@@ -157,11 +164,7 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildDot(0),
-            _buildDot(1),
-            _buildDot(2),
-          ],
+          children: [_buildDot(0), _buildDot(1), _buildDot(2)],
         ),
       ),
     );
@@ -182,7 +185,7 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
       ),
       body: Column(
         children: [
-          const SizedBox(height: 8),
+          const SizedBox(height: 25),
           SizedBox(
             height: 40,
             child: ListView.separated(
@@ -197,12 +200,16 @@ class _PersonaChatScreenState extends State<PersonaChatScreen> {
                     _controller.text = widget.actions[index].toString();
                   },
                   backgroundColor: const Color(0xFF2C1500),
-                  labelStyle: TextStyle(color: widget.accentColor, fontSize: 12),
+                  labelStyle: TextStyle(
+                    color: widget.accentColor,
+                    fontSize: 12,
+                  ),
                   side: BorderSide(color: widget.accentColor, width: 0.5),
                 );
               },
             ),
           ),
+          const SizedBox(height: 20),
           Expanded(
             child: ListView.builder(
               controller: _scrollController,
