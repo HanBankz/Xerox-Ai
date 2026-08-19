@@ -97,6 +97,8 @@ class _AuthScreenState extends State<AuthScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: const Color(0xFF1A0A00),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -125,13 +127,13 @@ class _AuthScreenState extends State<AuthScreen>
                         height: 120,
                         width: 120,
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 46),
                       const Text(
-                        'Xerox AI',
+                        'Hi Welcome 👋',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 28,
+                          fontSize: 33,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'TimesNewRoman',
                         ),

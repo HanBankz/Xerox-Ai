@@ -13,7 +13,7 @@ class AiService {
     final url = Uri.parse('https://api.groq.com/openai/v1/chat/completions');
 
     final body = jsonEncode({
-      'model': 'llama-3.3-70b-versatile',
+      'model': 'openai/gpt-oss-120b',
       'messages': [
         {'role': 'system', 'content': systemPrompt},
         ...messages.map((m) => {'role': m['role'], 'content': m['content']}),
