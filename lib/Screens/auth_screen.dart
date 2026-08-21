@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'home_screen.dart';
 import 'signup_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'forgot_password_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -90,6 +92,53 @@ class _AuthScreenState extends State<AuthScreen>
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(message)));
+    }
+    setState(() => _isLoading = false);
+  }
+
+  void _forgotPassword() async {
+    if (_emailController.text.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Enter your email first.')));
+      return;
+    }
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: _emailController.text.trim(),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Password reset email sent. Check your inbox.'),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Something went wrong. Check the email and try again.'),
+        ),
+      );
+    }
+  }
+
+  void _signInWithGoogle() async {
+    setState(() => _isLoading = true);
+    try {
+      final userCredential = await _authService.signInWithGoogle();
+      print('Google result: $userCredential');
+      if (userCredential != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+        );
+      }
+    } catch (e) {
+      print('Google error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Google sign in failed. Please try again.'),
+        ),
+      );
     }
     setState(() => _isLoading = false);
   }
@@ -240,6 +289,43 @@ class _AuthScreenState extends State<AuthScreen>
                               ),
                       ),
                       const SizedBox(height: 24),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const ForgotPasswordScreen(),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Forgot Password?',
+                            style: TextStyle(color: Color(0xFFD2691E)),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      OutlinedButton.icon(
+                        onPressed: _signInWithGoogle,
+                        icon: Image.asset(
+                          'assets/images/google_icon.png',
+                          height: 20,
+                          width: 20,
+                        ),
+                        label: const Text(
+                          'Continue with Google',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          side: const BorderSide(color: Color(0xFF8B4513)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

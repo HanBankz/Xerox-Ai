@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "705122694301",
+    "firebase_url": "https://ai-workspace-bc6c9-default-rtdb.firebaseio.com",
     "project_id": "ai-workspace-bc6c9",
     "storage_bucket": "ai-workspace-bc6c9.firebasestorage.app"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.example.ai_workspace"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "705122694301-1ia2slmeuks7k0l313g882u8g9817if3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ai_workspace",
+            "certificate_hash": "2b5f0ae70a8ea933dd9a9874f242f5d78c244e73"
+          }
+        },
+        {
+          "client_id": "705122694301-8kbbqrka44a0j3l1m802brq4c3qj9jqm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDtyoL_G7NsRetA4wo1vWbm2MNr69q1vl4"
@@ -20,7 +34,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "705122694301-8kbbqrka44a0j3l1m802brq4c3qj9jqm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "705122694301-vkc6bl1437a2kfj5iscckoi16c26guh4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.aiWorkspace"
+              }
+            }
+          ]
         }
       }
     }

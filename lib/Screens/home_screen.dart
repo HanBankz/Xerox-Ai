@@ -610,6 +610,12 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Image.asset(
+                    'assets/images/Xerox_ai.png',
+                    height: 60,
+                    width: 60,
+                  ),
+                  const SizedBox(height: 12),
                   const Text(
                     'Xerox AI',
                     style: TextStyle(
