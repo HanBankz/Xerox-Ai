@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'auth_screen.dart';
+import 'edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -27,7 +28,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _fetchUserData() async {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return;
-    final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get();
     setState(() {
       _name = doc.data()?['name'] ?? '';
       _email = doc.data()?['email'] ?? '';
@@ -63,12 +67,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   CircleAvatar(
                     radius: 50,
                     backgroundColor: const Color(0xFF2C1500),
-                    child: const Icon(Icons.person, size: 50, color: Color(0xFFD2691E)),
+                    child: const Icon(
+                      Icons.person,
+                      size: 50,
+                      color: Color(0xFFD2691E),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   Text(
                     _name,
-                    style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -80,20 +92,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     decoration: BoxDecoration(
                       color: const Color(0xFF2C1500),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0xFF8B4513), width: 0.5),
+                      border: Border.all(
+                        color: const Color(0xFF8B4513),
+                        width: 0.5,
+                      ),
                     ),
                     child: Column(
                       children: [
                         ListTile(
-                          leading: const Icon(Icons.edit, color: Color(0xFFD2691E)),
-                          title: const Text('Edit Profile', style: TextStyle(color: Colors.white)),
-                          trailing: const Icon(Icons.chevron_right, color: Colors.grey),
-                          onTap: () {},
+                          leading: const Icon(
+                            Icons.edit,
+                            color: Color(0xFFD2691E),
+                          ),
+                          title: const Text(
+                            'Edit Profile',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          trailing: const Icon(
+                            Icons.chevron_right,
+                            color: Colors.grey,
+                          ),
+                          onTap: () async {
+                            final updated = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    EditProfileScreen(currentName: _name),
+                              ),
+                            );
+                            if (updated == true) {
+                              _fetchUserData();
+                            }
+                          },
                         ),
                         const Divider(color: Color(0xFF8B4513), height: 1),
                         ListTile(
                           leading: const Icon(Icons.logout, color: Colors.red),
-                          title: const Text('Logout', style: TextStyle(color: Colors.red)),
+                          title: const Text(
+                            'Logout',
+                            style: TextStyle(color: Colors.red),
+                          ),
                           onTap: _logout,
                         ),
                       ],
