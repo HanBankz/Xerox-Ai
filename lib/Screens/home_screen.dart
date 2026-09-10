@@ -273,7 +273,7 @@ class _HomeContentState extends State<HomeContent>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
 
             // --- bankz GREETING ---
             Text(
@@ -384,7 +384,7 @@ class _HomeContentState extends State<HomeContent>
                 crossAxisCount: 2,
                 crossAxisSpacing: 25,
                 mainAxisSpacing: 25,
-                childAspectRatio: 2.4,
+                childAspectRatio: 0.85,
               ),
               itemCount: _updates.length,
               itemBuilder: (context, index) {
