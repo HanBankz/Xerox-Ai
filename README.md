@@ -15,8 +15,7 @@ An AI-powered mobile app built with Flutter, offering personalized AI personas a
 ## Tech Stack
 
 - Flutter & Dart
-- Firebase (Auth + Firestore)<img width="540" height="1126" alt="WhatsApp Image 2026-10-02 at 01 30 01" src="https://github.com/user-attachments/assets/c80f9ab4-d15a-4c76-8d31-8e923ec81ed4" />
-
+- Firebase (Auth + Firestore) 
 
 - Groq API (LLaMA 3.3 70B)
 - REST API via HTTP package
